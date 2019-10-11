@@ -1,0 +1,90 @@
+spring:
+  application:
+    name: sb2demo2
+  jackson:
+    date-format: "yyyy-MM-dd HH:mm:ss"
+    locale: zh_CN
+    time-zone: GMT+08:00
+
+server:
+  port: 8443
+  ssl:
+    key-store: classpath:keystore.jks
+    key-store-password: 123456
+    key-password: 123456
+  http2:
+    enabled: true
+  use-forward-headers: true
+
+# CORS 跨域配置
+cors:
+  enable-cors: true
+  cors-mappers:
+    - mapping: /login
+      origins:
+        - "*"
+      method:
+        - POST
+      headers:
+        - "*"
+      maxAge: 7200
+
+    - mapping: /user/**
+      origins:
+        - https://baidu.com
+        - https://github.com
+      method:
+        - GET
+        - PUT
+        - POST
+        - DELETE
+      headers:
+        - "*"
+      maxAge: 7200
+
+# 权限认证配置
+auth:
+  auth-path:
+    white-list:
+      - post /login
+    check-list:
+      - any /user/**
+      - get /show-me
+    role-list:
+      - post,delete /user/** admin,supper-admin
+
+# JWT 配置
+jwt-auth:
+  header-name: Authorization
+  # 使用RSA对JWT签名
+  key-type: RS256
+  encrypt-key: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCELwzs3uh44sdoCyLx+p9nS1veFLOQG01NbOQ70tpPlkZzzZlfg2kBOjKTU4EI6Lha7JCb8VTqyRbDhChuuyCXbkNkuveqkpiwx0t2DwcUm/L86OrdZq7UGIebp6mn0+frhV8hAPIL7sqdWjwtIdat5CcYLvx82j6G/n2TFIbgFsnk6XV5neP/AVVCGjfXgAb5bz35YIywf2Pkk96zXYUueq4mheD4jpVgpTJ9WjukF0BkcSRqIlmVxz1TeKzcs8tCGSkmsIqXUTZj4mVDtMNzSqMXu6HI++tCmmBdLoVNoElu4jTww72iuitwx623Cqjl7c12aznVMY3HeHjtPs/XAgMBAAECggEALjCWzqryB1QPpD7H/lC6pQjDWG5ZdNDliVm0w2bh3I/BnLPKlYLBDam9hJfYbjmMOlGSErwZFVYhez7SNidzsxbXu/pNkzBY5OUvbFjB+6SnG1N0xtsb2oeb03uaIEg/MaDQZiMDccIG0Ud34bmCYA9qzduVZTeKQ/fn/55bpzAsB9ofZfLCLzsgmolRyx+iY03N37OVEbQO0mk/F3eZF1/32kfQgN+18z2dCx2Q9RNWyljs608iAwqLlczBPJ0G/molCaqeMU7Z+bY8aOen0YBeUl1c6vLknxNxj8YwFblp1DvUHhHOFSwOAiR0pEVNpe4Eh4z8VQkgbS3duAkXsQKBgQDiwrRLHYqlda6b9zIQYhpyjitsZfXCAcMlRnW16K5LXg81U8X7BL2kWGcyCmGNObQ3Vo3YBPRx/Mofrtrn3TUZ+GB9+KAe5SMWdJshVC96dpMcvfRO8o1ayCIaa09UqWlKni8KN1GAqyOKFf0AL+ZN7n1ysotrEOXFXHhWNsDCCQKBgQCVOmV3FqS4cEp29ny/NrEHfeADunVvr5sYJaJ2irDUTVEtbqv4JLVxuzzvxhO+Z6fuJqbMEBZtFwVKnyVru7GrzjgcOxGS2vWDbb0s5SKSBqzF5H8sjww7QONsdrK8Bx34uhQMJvafwJPEPZ8mposNuFyvtGABLosDyKmPEVH63wKBgFFSQDQ8CO/jr1XxpbuoYxG4GKyMOEF2PlTM2wP8yRzwQ4X9YB/wiE47Ae85N9jc29uIp9/TjxKd9KK+I3VJqHSC1Z/3nPzXcejosoWWWlyRz5pcKRRy+eyXn1tYJqAXDVKcPgRs6Ea7mUg5MH1zsCU8pTKQA13HNo+75NAOXLx5AoGAVeXTWgVys6gPdQLVM8vrgwB13i+KQcu3XuLq7YlP2CTZQWmfG6sltl2s6ef+nW9VPsSI5pWsEwdZSGbrR2Q3FUoTCk0GBJ59DDYy2pDaoWuuMAsjGScOR11Gi7yXjZwbKH0T5RrYg4R6ik9eOQVMrY0d7RXK3WNJKdhroaq6ockCgYB3SB4jsJnTrE59yC75OSmAE06XMJZ9STZOhixAUKcL22uuXTYhxlIY+Rs0clX88V4WK0hdn9YAlASkVM7SiRz8PemEt6tLA2dxkbOOTrMAuTnPRU2oXS8ue0dbb549r0uqMthNwmGA+09UFW6grWyD6Zh7PUvpAO/kN1Y+Nv4f8g==
+  decrypt-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhC8M7N7oeOLHaAsi8fqfZ0tb3hSzkBtNTWzkO9LaT5ZGc82ZX4NpAToyk1OBCOi4WuyQm/FU6skWw4Qobrsgl25DZLr3qpKYsMdLdg8HFJvy/Ojq3Wau1BiHm6epp9Pn64VfIQDyC+7KnVo8LSHWreQnGC78fNo+hv59kxSG4BbJ5Ol1eZ3j/wFVQho314AG+W89+WCMsH9j5JPes12FLnquJoXg+I6VYKUyfVo7pBdAZHEkaiJZlcc9U3is3LPLQhkpJrCKl1E2Y+JlQ7TDc0qjF7uhyPvrQppgXS6FTaBJbuI08MO9ororcMettwqo5e3Ndms51TGNx3h47T7P1wIDAQAB
+# 使用HMAC对JWT签名
+#  key-type: HS512
+#  encrypt-key: ZyJO5pd6RvfMX5vM/aryD4E6fpMDeFstlTL6xJW94QY+nJ0qtAmXyvhDV/0TWbaSqN+ngQdYmseBY3Ia8z2iVQ==
+#  decrypt-key: QAtzjHTQBGuMMPI9muoI0Dpf+GT9Si/nT8CIhz0wqYTVFpvxsvrQ0bUCghKXQs6sSBt4X7EBHV8bRZSZxaxeBw==
+
+# swagger2 API文档配置
+swagger:
+  title: "sb2demo2-api-doc"
+  description: "sb2demo2 api 文档"
+  version: "0.0.1-SNAPSHOT"
+  contact:
+    name: "echcz"
+    url: "https://github.com/echcz"
+  base-package: "com.github.echcz.sb2demo2.controller"
+  authorization:
+    key-name: ${jwt-auth.header-name}
+
+logging:
+  level:
+    root: debug
+
+admin:
+  userId: 2
+  username: root
+  password: 123456
+  roles:
+    - admin
+    - user
