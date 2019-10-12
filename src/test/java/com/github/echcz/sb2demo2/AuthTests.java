@@ -75,25 +75,4 @@ public class AuthTests {
 
     }
 
-    @Test
-    public void t() {
-        ZoneId cn = ZoneId.of("+10");
-        LocalDateTime now3 = LocalDateTime.now(cn);
-        System.out.println(now3);
-        String format = now3.format(DateTimeFormatter.ofPattern("yyyy-MMM-dd HH:mm:ss", Locale.CHINESE));
-        System.out.println(format);
-    }
-
-    @Autowired
-    CorsProperties corsProperties;
-
-    @Test
-    public void tt() {
-        System.out.println(corsProperties.isEnableCors());
-        for (CorsProperties.CorsMapper corsMapper : corsProperties.getCorsMappers()) {
-            System.out.println(corsMapper);
-        }
-    }
-
-
 }

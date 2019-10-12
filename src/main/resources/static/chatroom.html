@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <title>chatroom</title>
+</head>
+<body>
+<input id="text" type="text" >
+<button onclick="sendMsg()">Send</button>
+<button onclick="closeSocket()">Close</button>
+<div>
+    <ul id="msg-box"></ul>
+</div>
+
+<script type="text/javascript">
+    let websocket = new WebSocket("wss://localhost:8443/chat");
+    printMsg('[正在连接]...')
+
+    websocket.onopen = () => {
+        printMsg('...[连接成功]')
+    }
+
+    websocket.onmessage = (event) => {
+        printMsg(`[收到]: ${event.data}`)
+    }
+
+    websocket.onclose = () => {
+        printMsg('...[连接已关闭]')
+    }
+
+    websocket.onerror = () => {
+        printMsg('===[发生错误]===')
+    }
+
+    function printMsg(msg) {
+        let child = document.createElement('li')
+        child.appendChild(document.createTextNode(msg));
+        document.getElementById('msg-box').appendChild(child)
+    }
+
+    function sendMsg() {
+        let text = document.getElementById('text');
+        let msg = text.value;
+        websocket.send(msg)
+        printMsg(`[发送]: ${msg}`)
+        text.value = '';
+    }
+
+    function closeSocket() {
+        printMsg("[正在关闭连接]...")
+        websocket.close()
+    }
+</script>
+</body>
+</html>

@@ -8,3 +8,4 @@
   * 使用 swagger2 做为 API 文档
   * 支持在配置文件中配置 CORS 跨域
   * 支持在配置文件中配置 url 的认证与权限要求
+  * 支持 web socket
